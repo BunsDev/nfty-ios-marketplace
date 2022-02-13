@@ -28,7 +28,7 @@ struct TokenListPagedView: View {
   var body: some View {
     VStack(spacing:0) {
       
-      switch(nfts.error,nfts.tokens.count) {
+      switch(nfts.error,nfts.tokens.isEmpty) {
       case (.some(let error),_):
         VStack(spacing:20) {
           Image(systemName: "exclamationmark.triangle")
@@ -38,7 +38,7 @@ struct TokenListPagedView: View {
             .font(.subheadline)
             .foregroundColor(.secondary)
         }
-      case (.none,0):
+      case (.none,true):
         ProgressView()
           .scaleEffect(2.0, anchor: .center)
           .onAppear {
@@ -46,13 +46,13 @@ struct TokenListPagedView: View {
               print(self.nfts.tokens)
             }
           }
-      case (.none,_):
+      case (.none,false):
         GeometryReader { metrics in
           ScrollView {
             LazyVGrid(
               columns: Array(
                 repeating:GridItem(.flexible(maximum:RoundedImage.NarrowSize + 40)),
-                count:Int((metrics.size.width / RoundedImage.NarrowSize)) - 2)) {
+                count:max(2,Int((metrics.size.width / RoundedImage.NarrowSize)) - 2))) {
                   ForEach(nfts.tokens.indices,id:\.self) { index in
                     let nft = nfts.tokens[index];
                     let info = collection.info

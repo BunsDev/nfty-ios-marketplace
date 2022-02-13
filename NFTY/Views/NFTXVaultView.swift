@@ -32,8 +32,7 @@ struct NFTXVaultView: View {
           LazyVGrid(
             columns: Array(
               repeating:GridItem(.flexible(maximum:RoundedImage.NarrowSize + 40)),
-              count:Int((metrics.size.width / RoundedImage.NarrowSize)) - 2)
-          ) {
+              count:max(2,Int((metrics.size.width / RoundedImage.NarrowSize)) - 2))) {
                 ForEach(nfts.tokens.indices,id:\.self) { index in
                   let nft = nfts.tokens[index];
                   let info = collection.info
